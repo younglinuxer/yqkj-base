@@ -1,0 +1,77 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: '2'
+    k8s.kuboard.cn/displayName: yqkj-app
+    k8s.kuboard.cn/ingress: 'false'
+    k8s.kuboard.cn/service: ClusterIP
+    k8s.kuboard.cn/workload: svc-yqkj-app
+  generation: 2
+  labels:
+    k8s.kuboard.cn/layer: svc
+    k8s.kuboard.cn/name: svc-yqkj-app
+  name: svc-yqkj-app
+  namespace: app
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/layer: svc
+      k8s.kuboard.cn/name: svc-yqkj-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s.kuboard.cn/layer: svc
+        k8s.kuboard.cn/name: svc-yqkj-app
+    spec:
+      containers:
+        - env:
+            - name: app_name
+              value: yqkj-app
+          image: 'registry.cn-hangzhou.aliyuncs.com/jck/young-demo:v1'
+          imagePullPolicy: IfNotPresent
+          name: yqkj-app
+          resources:
+            limits:
+              memory: 500Mi
+      dnsConfig: {}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        seLinuxOptions: {}
+      terminationGracePeriodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    k8s.kuboard.cn/displayName: yqkj-app
+    k8s.kuboard.cn/workload: svc-yqkj-app
+  labels:
+    k8s.kuboard.cn/layer: svc
+    k8s.kuboard.cn/name: svc-yqkj-app
+  name: svc-yqkj-app
+  namespace: app
+spec:
+  ports:
+    - name: yqkj-app
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    k8s.kuboard.cn/layer: svc
+    k8s.kuboard.cn/name: svc-yqkj-app
+  sessionAffinity: None
+  type: ClusterIP
