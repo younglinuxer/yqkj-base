@@ -1,0 +1,13 @@
+FROM younglinuxer/openjdk-yq:8
+MAINTAINER younglinuxer younglinuxer@gamil.com
+ENV APP_HOME /yqkj
+WORKDIR $APP_HOME
+
+{% if ENABLE_CHECK %}
+HEALTHCHECK --interval=10s --timeout=10s CMD curl {{ CHECK_URL }}|| exit 1
+# CMD curl -fs http://localhost/ || exit 1
+{% endif %}
+
+ADD *.jar $APP_HOME/{{ APP_NAME }}.jar
+
+ENTRYPOINT ["/bin/bash","-c","start"]

@@ -1,0 +1,77 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: '2'
+    k8s.kuboard.cn/displayName: {{ APP_NAME }}
+    k8s.kuboard.cn/ingress: 'false'
+    k8s.kuboard.cn/service: ClusterIP
+    k8s.kuboard.cn/workload: svc-{{ APP_NAME }}
+  generation: 2
+  labels:
+    k8s.kuboard.cn/layer: svc
+    k8s.kuboard.cn/name: svc-{{ APP_NAME }}
+  name: svc-{{ APP_NAME }}
+  namespace: {{ NAMESPACE }}
+spec:
+  progressDeadlineSeconds: 600
+  replicas: {{ REPLICAS }}
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      k8s.kuboard.cn/layer: svc
+      k8s.kuboard.cn/name: svc-{{ APP_NAME }}
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        k8s.kuboard.cn/layer: svc
+        k8s.kuboard.cn/name: svc-{{ APP_NAME }}
+    spec:
+      containers:
+        - env:
+            - name: app_name
+              value: {{ APP_NAME }}
+          image: '{{ IMAGE }}'
+          imagePullPolicy: IfNotPresent
+          name: {{ APP_NAME }}
+          resources:
+            limits:
+              memory: {{ MEMORY }}
+      dnsConfig: {}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext:
+        seLinuxOptions: {}
+      terminationGracePeriodSeconds: 30
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    k8s.kuboard.cn/displayName: {{ APP_NAME }}
+    k8s.kuboard.cn/workload: svc-{{ APP_NAME }}
+  labels:
+    k8s.kuboard.cn/layer: svc
+    k8s.kuboard.cn/name: svc-{{ APP_NAME }}
+  name: svc-{{ APP_NAME }}
+  namespace: {{ NAMESPACE }}
+spec:
+  ports:
+    - name: {{ APP_NAME }}
+      port: {{ PORT }}
+      protocol: TCP
+      targetPort: {{ PORT }}
+  selector:
+    k8s.kuboard.cn/layer: svc
+    k8s.kuboard.cn/name: svc-{{ APP_NAME }}
+  sessionAffinity: None
+  type: ClusterIP
