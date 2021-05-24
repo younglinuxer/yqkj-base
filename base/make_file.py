@@ -2,6 +2,7 @@
 # -- coding:utf8 --
 import os
 from shell import *
+
 from jinja2 import Environment, FileSystemLoader
 import zipfile
 import wget
@@ -50,7 +51,6 @@ def Make_zip_docker(ZIP_URL='https://iptables.cn/file/demo-mgr.zip', DOCKER_TAG=
     zipF.close()
     shell(cmd_build_docker)
     shell(cmd_push_docker)
-    # return
 
 
 def Make_YamlFile(APP_NAME='test-demo', NAMESPACE='app', REPLICAS=1, MEMORY='1Gi', PORT='80', IMAGE='nginx'):
@@ -73,4 +73,37 @@ def Make_YamlFile(APP_NAME='test-demo', NAMESPACE='app', REPLICAS=1, MEMORY='1Gi
         fp.write(content)
     # return
 
-# Make_zip_docker()
+
+def MakeNginxFile(NAMESPACE="young-sit", NCONF_PATH="nginx-all/nginx-all.conf"):
+    """
+    根据获取的services 生成nginx.conf
+    :param NAMESPACE: 获取该namespace下的services
+    :return:
+    """
+    get_all_svc = "kubectl get svc -n %s |grep '80/TCP'|awk '{print $1}'" % NAMESPACE
+    SVC_LIST = r_shell(get_all_svc)[1].split()
+    # SVC_LIST=('young','younglinuxer')
+    print(SVC_LIST)
+    env = Environment(loader=FileSystemLoader("./"))
+    template = env.get_template('./template/nginxconf.j2')
+    # template = env.get_template('./template/nginxconf_test.j2')
+    content = template.render(SVC_LIST=SVC_LIST)
+    with open(NCONF_PATH, 'w') as ng:
+        ng.write(content.encode('utf-8'))
+    # return
+
+
+def MakeIgYaml(NAMESPACE="young-sit"):
+    """
+    :param NAMESPACE: g
+    :return:
+    """
+    get_all_svc = "kubectl get svc -n %s |grep '80/TCP'|awk '{print $1}'" % NAMESPACE
+    SVC_LIST = r_shell(get_all_svc)[1].split()
+    print(SVC_LIST)
+    name = 'nginx-all' + '/' + 'zebra-ingress.yaml'
+    env = Environment(loader=FileSystemLoader("./"))
+    template = env.get_template('./template/nginx-ingress.yaml.j2')
+    content = template.render(SVC_LIST=SVC_LIST)
+    with open(name, 'w') as ng:
+        ng.write(content.encode('utf-8'))

@@ -1,0 +1,29 @@
+server {
+  listen 80;
+  server_name localhost;
+  charset utf-8;
+  client_header_buffer_size 512k;
+  large_client_header_buffers 4 512k;
+  client_max_body_size 200m;
+  index index.html index.htm index.php;
+
+  root /usr/share/nginx/html/;
+
+  # 跳转至登录页
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+    }
+
+
+
+###########################################设置通过services获取services进行反向代理
+{% for SVC in SVC_LIST %}
+
+  location  ~ ^/{{ SVC }}/ {
+    proxy_pass http://{{ SVC }}:80;
+  }
+{% endfor %}
+###########################################设置通过services获取services进行反向代理
+
+}

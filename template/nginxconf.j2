@@ -1,0 +1,146 @@
+server {
+  listen 80;
+  server_name localhost;
+  charset utf-8;
+  client_header_buffer_size 512k;
+  large_client_header_buffers 4 512k;
+  client_max_body_size 200m;
+  index index.html index.htm index.php;
+
+  root /usr/share/nginx/html/;
+
+  # 跳转至登录页
+  location = / {
+      index index.html;
+      try_files /usr/share/nginx/html /zebra-ui/index.html;
+  }
+
+  location ^~ /#/zebra-ui/ {
+      index index.html ;
+      try_files $uri $uri/ /zebra-ui/index.html;
+  }
+
+  location ^~ /zebra-ui/ {
+      index index.html ;
+      try_files $uri $uri/ /zebra-ui/index.html;
+  }
+
+
+
+
+  #统一js
+  location ^~ /jquery-3.4.1.min.js {
+        root /usr/share/nginx/html/;
+  }
+
+  #前端数据采集
+  location ^~ /web-report-default.min.js {
+        root /usr/share/nginx/html/;
+  }
+
+  #静态资源
+  location ^~ /static/ {
+      root /usr/share/nginx/html/;
+  }
+
+  location ^~ /zebra-children-ui-public/ {
+      root /usr/share/nginx/html/;
+  }
+  location ^~ /rule-design-ui-public/ {
+      root /usr/share/nginx/html/;
+  }
+
+  location ^~ /zebra-ui-public/ {
+      root /usr/share/nginx/html/;
+  }
+
+    #  页面入口  fixme 此名称请以项目名命名
+
+
+
+  #微信登录代理
+  location ^~/weixin/ {
+    proxy_redirect off;
+
+    proxy_pass https://weixin.openapi.site/;
+  }
+
+###########################################设置通过services获取services进行反向代理
+{% for SVC in SVC_LIST %}
+
+  location  ~ ^/{{ SVC }}/ {
+    proxy_pass http://{{ SVC }}:80;
+  }
+{% endfor %}
+###########################################设置通过services获取services进行反向代理
+
+
+
+   #其它路径全部代理到网关接口中
+  location /api/ {
+    proxy_cookie_path /zebra-ui /zebra-ui;
+    proxy_cookie_path / /;
+    proxy_redirect off;
+    proxy_set_header Host $host;
+    proxy_set_header X-real-ip $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_pass http://gateway.zebra-sit.svc.cluster.local:10000/api/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection  upgrade;
+  }
+
+  # 代理天眼查图片地址
+  location /tm/ {
+    proxy_redirect off;
+    proxy_set_header Host http://tm-image.tianyancha.com;
+    proxy_set_header X-real-ip $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_pass http://tm-image.tianyancha.com/tm/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection  upgrade;
+  }
+
+   # 代理天眼查图片地址
+  location /image_search/ {
+    proxy_redirect off;
+    proxy_set_header Host tm-image.tianyancha.com;
+    proxy_set_header X-real-ip $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_pass http://tm-image.tianyancha.com/tm/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection  upgrade;
+  }
+
+   #其它路径全部代理到网关接口中
+  location /mgr/ {
+    proxy_cookie_path /zebra-ui /zebra-ui;
+    proxy_cookie_path / /;
+    proxy_redirect off;
+    proxy_set_header Host $host;
+    proxy_set_header X-real-ip $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_pass http://gateway.zebra-sit.svc.cluster.local:10000/mgr/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection  upgrade;
+  }
+
+
+
+  #其它路径全部代理到网关接口中
+  location / {
+    proxy_cookie_path /zebra-ui /zebra-ui;
+    proxy_cookie_path / /;
+    proxy_redirect off;
+    proxy_set_header Host $host;
+    proxy_set_header X-real-ip $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_pass http://gateway.zebra-sit.svc.cluster.local:10000/;
+    proxy_http_version 1.1;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection  upgrade;
+  }
+}

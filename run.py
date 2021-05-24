@@ -45,5 +45,22 @@ def get_pod_status():
         return json.dumps({'msg': 'pod is not running'}, ensure_ascii=False)
 
 
+@app.route('/re_create_ng', methods=["POST"])
+def re_create_ng():
+    # data = request.form
+    data = request.json
+    NAMESPACE,NCONF_PATH = data['namespace'],data['nconf_path']
+    re_config_ng(NAMESPACE=NAMESPACE,NCONF_PATH=NCONF_PATH)
+    return json.dumps({'msg': '创建中 /get_pod_status 查看创建状态'}, ensure_ascii=False)
+
+
+@app.route('/re_ingress', methods=["POST"])
+def re_ingress():
+    # data = request.form
+    data = request.json
+    NAMESPACE = data['namespace']
+    re_zebra_ig(NAMESPACE=NAMESPACE)
+    return json.dumps({'msg': '创建中 /get_pod_status 查看创建状态'}, ensure_ascii=False)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8081, debug=True, threaded=True)
