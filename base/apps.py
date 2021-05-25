@@ -40,6 +40,13 @@ def re_zebra_ig(NAMESPACE):
     """
 
     MakeIgYaml(NAMESPACE=NAMESPACE)
-    update_ingress_cmd = "kubectl replace --force  -f  nginx-all/zebra-ingress.yaml"
-    print(update_ingress_cmd)
-    return
+    # verification_yaml = "kubeval nginx-all/zebra-ingress.yaml"
+    # print(r_shell(verification_yaml))
+    # 采用$? 验证是否应用成功 kubeval只能验证语法
+    update_ingress_cmd = "kubectl replace --force  -f  nginx-all/zebra-ingress.yaml && echo $?"
+    data = r_shell(update_ingress_cmd)
+    print(data)
+    if data[0] == 0:
+        return json.dumps({'msg': '更新ingress 成功'}, ensure_ascii=False)
+    else:
+        return json.dumps({'msg': '更新ingress 失败'}, ensure_ascii=False)

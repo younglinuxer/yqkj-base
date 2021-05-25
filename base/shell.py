@@ -2,6 +2,7 @@
 # -- coding:utf8 --
 import os
 import commands
+import json
 
 
 def shell(cmd='uname -a'):

@@ -61,3 +61,20 @@ namespace: k8s namespace
 {"msg": "pod is not running"}
 {"msg": "pod is running"}
 ```
+
+# 根据当前服务创建ingress
+```
+ingress 模板配置文件 ./template/nginx-ingress.yaml.j2 (配置zebra-ui的ingress模板)
+生成zebra-ingress.yaml文件放在nginx-all 目录下
+默认查询传入namespace 中所有 监听为80端口的services 加入 ingress
+zebra-ui中的nginx配置文件只保留特殊配置 其他反向代理到nginx的配置取消由ingress替代 
+
+curl --location --request POST 'http://192.168.44.130:8081/re_ingress' \
+--header 'Content-Type: application/json' \
+--data-raw '{"namespace":"young-sit"}'
+
+返回信息:
+{"msg": "更新ingress 成功"}  
+{"msg": "更新ingress 失败"}
+
+```

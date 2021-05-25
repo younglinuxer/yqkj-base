@@ -2,7 +2,6 @@
 # -- coding:utf8 --
 
 from flask import Flask, request
-import json
 from base.apps import *
 from concurrent.futures import ThreadPoolExecutor
 
@@ -59,8 +58,7 @@ def re_ingress():
     # data = request.form
     data = request.json
     NAMESPACE = data['namespace']
-    re_zebra_ig(NAMESPACE=NAMESPACE)
-    return json.dumps({'msg': '创建中 /get_pod_status 查看创建状态'}, ensure_ascii=False)
+    return re_zebra_ig(NAMESPACE=NAMESPACE)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8081, debug=True, threaded=True)
