@@ -11,6 +11,20 @@ docker_file: zip包下载后解压的目录 包含Dockerfile 和jar包
 zip_file: zip_file 下载临时存储的位置 
 k8s_file: 生成的k8s部署文件
 ```
+### 快速部署
+```text
+  docker run -d \
+  --name="test-y" \
+  --net="host" \ 
+  --pid="host" \
+  -v /root/.kube:/root/.kube \  #挂载kube环境变量
+  -v /var/run/docker.sock:/var/run/docker.sock \ #挂载docker sock文件 即可在容器内调用docker
+  -v /opt/kube/bin:/usr/local/sbin younglinuxer/yqkj-base:v1  #挂载k8s相关命令在容器内使用
+
+
+docker exec -it test-y bash #测试在容器内调用相关如(kubectl get pod -A) 成功即可
+```
+
 
 ### 调用
 ```
