@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -- coding:utf8 --
+import json
 import os
 from shell import *
 
@@ -98,12 +99,27 @@ def MakeIgYaml(NAMESPACE="young-sit"):
     :param NAMESPACE: g
     :return:
     """
+    get_zebra_ingress = "kubectl get  ingress -n %s  zebra-ui   -o json" % NAMESPACE
     get_all_svc = "kubectl get svc -n %s |grep '80/TCP'|awk '{print $1}'" % NAMESPACE
+    # 通过命令获取服务列表
     SVC_LIST = r_shell(get_all_svc)[1].split()
-    print(SVC_LIST)
-    name = 'nginx-all' + '/' + 'zebra-ingress.yaml'
-    env = Environment(loader=FileSystemLoader("./"))
-    template = env.get_template('./template/nginx-ingress.yaml.j2')
-    content = template.render(SVC_LIST=SVC_LIST)
-    with open(name, 'w') as ng:
-        ng.write(content.encode('utf-8'))
+    zebra_ingress = json.loads(r_shell(get_zebra_ingress)[1])
+    # 获取zebra-ui 下绑定的域名
+    DOMAIN = zebra_ingress["spec"]["rules"][0]["host"]
+    # ["spec"]["rules"][0]["host"]
+    print('xxxxxxxxxxxxxxxx',DOMAIN)
+    SVC_IN_LIST = []
+    for i in zebra_ingress["spec"]["rules"][0]["http"]["paths"]:
+        SVC_IN_LIST.append(i["backend"]["service"]["name"])
+    if "found" in SVC_LIST:
+        logger.info("未获取到服务列表")
+        return
+    else:
+        logger.info("获取域名: %s 获取服务列表:%s "% (DOMAIN,SVC_LIST))
+        name = 'nginx-all' + '/' + 'zebra-ingress.yaml'
+        env = Environment(loader=FileSystemLoader("./"))
+        template = env.get_template('./template/nginx-ingress.yaml.j2')
+        content = template.render(SVC_LIST=SVC_LIST,DOMAIN=DOMAIN,NAMESPACE=NAMESPACE)
+        with open(name, 'w') as ng:
+            ng.write(content.encode('utf-8'))
+    return 0

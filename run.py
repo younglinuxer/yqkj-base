@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -- coding:utf8 --
+import sys
 
 from flask import Flask, request
 from base.apps import *
@@ -9,6 +10,9 @@ app = Flask(__name__)
 
 executor = ThreadPoolExecutor(3)
 
+if sys.getdefaultencoding() != 'utf-8':
+    reload(sys)
+    sys.setdefaultencoding('utf-8')
 
 @app.route('/create_pod', methods=["POST"])
 def create_pod():
@@ -58,6 +62,7 @@ def re_ingress():
     # data = request.form
     data = request.json
     NAMESPACE = data['namespace']
+    logger.info("开始根据 %s 更新ingress" % NAMESPACE)
     return re_zebra_ig(NAMESPACE=NAMESPACE)
 
 if __name__ == '__main__':
