@@ -103,17 +103,27 @@ def MakeIgYaml(NAMESPACE="young-sit"):
     get_all_svc = "kubectl get svc -n %s |grep '80/TCP'|awk '{print $1}'" % NAMESPACE
     # 通过命令获取服务列表
     SVC_LIST = r_shell(get_all_svc)[1].split()
-    zebra_ingress = json.loads(r_shell(get_zebra_ingress)[1])
+    try:
+        zebra_ingress = json.loads(r_shell(get_zebra_ingress)[1])
+    except:
+        logging.info("未获取到 zebra-ui 或者 ingress")
+        return "未获取到 zebra-ui 或者 ingress"
     # 获取zebra-ui 下绑定的域名
     DOMAIN = zebra_ingress["spec"]["rules"][0]["host"]
     # ["spec"]["rules"][0]["host"]
-    print('xxxxxxxxxxxxxxxx',DOMAIN)
+    # print('xxxxxxxxxxxxxxxx',DOMAIN)
     SVC_IN_LIST = []
     for i in zebra_ingress["spec"]["rules"][0]["http"]["paths"]:
         SVC_IN_LIST.append(i["backend"]["service"]["name"])
-    if "found" in SVC_LIST:
+    print(sorted(set(SVC_IN_LIST)))
+    print(sorted(SVC_LIST))
+    # 比较如果 ingress_path 与service 一致 则不更新
+    if sorted(set(SVC_IN_LIST)) == sorted(SVC_LIST):
+        logging.info('获取ingress_path 与service 一致 不需要更新')
+        return '获取ingress_path 与service 一致 不需要更新'
+    elif "found" in SVC_LIST:
         logger.info("未获取到服务列表")
-        return
+        return "未获取到服务列表"
     else:
         logger.info("获取域名: %s 获取服务列表:%s "% (DOMAIN,SVC_LIST))
         name = 'nginx-all' + '/' + 'zebra-ingress.yaml'

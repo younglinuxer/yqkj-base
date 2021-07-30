@@ -1,0 +1,2 @@
+# sync ingress
+* * * * * /usr/local/bin/python /yqkj-base/tools/update-ingress.py >> /yqkj-base/cron.log 2>&1

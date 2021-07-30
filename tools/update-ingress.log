@@ -1,0 +1,27 @@
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Added job "re_ingress" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Added job "re_ingress" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.scheduler:Adding job tentatively -- it will be properly scheduled when the scheduler starts
+INFO:apscheduler.scheduler:Added job "re_ingress" to job store "default"
+INFO:apscheduler.scheduler:Scheduler started
+INFO:apscheduler.executors.default:Running job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:46:15 CST)" (scheduled at 2021-07-28 14:45:15.398000+08:00)
+INFO:apscheduler.executors.default:Job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:46:15 CST)" executed successfully
+INFO:apscheduler.executors.default:Running job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:47:15 CST)" (scheduled at 2021-07-28 14:46:15.398000+08:00)
+INFO:apscheduler.executors.default:Job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:47:15 CST)" executed successfully
+INFO:apscheduler.executors.default:Running job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:48:15 CST)" (scheduled at 2021-07-28 14:47:15.398000+08:00)
+INFO:apscheduler.executors.default:Job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:48:15 CST)" executed successfully
+INFO:apscheduler.executors.default:Running job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:49:15 CST)" (scheduled at 2021-07-28 14:48:15.398000+08:00)
+INFO:apscheduler.executors.default:Job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:49:15 CST)" executed successfully
+INFO:apscheduler.executors.default:Running job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:50:15 CST)" (scheduled at 2021-07-28 14:49:15.398000+08:00)
+INFO:apscheduler.executors.default:Job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:50:15 CST)" executed successfully
+INFO:apscheduler.executors.default:Running job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:51:15 CST)" (scheduled at 2021-07-28 14:50:15.398000+08:00)
+INFO:apscheduler.executors.default:Job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:51:15 CST)" executed successfully
+INFO:apscheduler.executors.default:Running job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:52:15 CST)" (scheduled at 2021-07-28 14:51:15.398000+08:00)
+INFO:apscheduler.executors.default:Job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:52:15 CST)" executed successfully
+INFO:apscheduler.executors.default:Running job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:53:15 CST)" (scheduled at 2021-07-28 14:52:15.398000+08:00)
+INFO:apscheduler.executors.default:Job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:53:15 CST)" executed successfully
+INFO:apscheduler.executors.default:Running job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:54:15 CST)" (scheduled at 2021-07-28 14:53:15.398000+08:00)
+INFO:apscheduler.executors.default:Job "re_ingress (trigger: interval[0:01:00], next run at: 2021-07-28 14:54:15 CST)" executed successfully

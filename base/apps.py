@@ -38,9 +38,8 @@ def re_zebra_ig(NAMESPACE):
     :param NAMESPACE:
     :return:
     """
-
-    # MakeIgYaml(NAMESPACE=NAMESPACE)
-    if MakeIgYaml(NAMESPACE=NAMESPACE) != 0:return json.dumps({'msg': '获取到数据出错请检查是否存在数据'}, ensure_ascii=False)
+    Mk_Y = MakeIgYaml(NAMESPACE=NAMESPACE)
+    if Mk_Y != 0:return json.dumps(Mk_Y, ensure_ascii=False)
     # verification_yaml = "kubeval nginx-all/zebra-ingress.yaml"
     # print(r_shell(verification_yaml))
     # 采用$? 验证是否应用成功 kubeval只能验证语法
