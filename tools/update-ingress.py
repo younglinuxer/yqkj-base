@@ -7,8 +7,7 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 logging.basicConfig(filename='./update-ingress.log', level=logging.INFO)
 
 def re_ingress():
-    print('xxxxxxxxxxxx')
-    get_namespace = "kubectl get namespaces |grep -v  -E 'kube|nginx|default|NAME'|awk '{print $1}'"
+    get_namespace = "kubectl get namespaces |grep -v  -E 'kube|nginx|default|NAME|zebra'|awk '{print $1}'"
     for namespace in commands.getstatusoutput(get_namespace)[1].split():
         print(namespace)
         url = "http://127.0.0.1:8081/re_ingress"

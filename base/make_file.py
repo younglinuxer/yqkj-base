@@ -114,9 +114,14 @@ def MakeIgYaml(NAMESPACE="young-sit"):
     # print('xxxxxxxxxxxxxxxx',DOMAnIN)
     SVC_IN_LIST = []
     for i in zebra_ingress["spec"]["rules"][0]["http"]["paths"]:
-        SVC_IN_LIST.append(i["backend"]["service"]["name"])
-    print(sorted(set(SVC_IN_LIST)))
-    print(sorted(SVC_LIST))
+        try:
+            SVC_IN_LIST.append(i["backend"]["service"]["name"])
+        except KeyError:
+            # 老版本 k8s返回数据为 serviceName 开发环境的k8s版本较老
+            SVC_IN_LIST.append(i["backend"]["serviceName"])
+        except :
+            return "无法获取到ingress path name"
+
     # 比较如果 ingress_path 与service 一致 则不更新
     if sorted(set(SVC_IN_LIST)) == sorted(SVC_LIST):
         logging.info('获取ingress_path 与service 一致 不需要更新')
