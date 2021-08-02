@@ -50,3 +50,18 @@ def re_zebra_ig(NAMESPACE):
         return json.dumps({'msg': '更新ingress 成功'}, ensure_ascii=False)
     else:
         return json.dumps({'msg': '更新ingress 失败'}, ensure_ascii=False)
+
+def run_cmd(cmd='kubectl get namespace'):
+    if 'kubectl' not in cmd:return json.dumps({'msg':'只能使用kuebectl命令'}, ensure_ascii=False)
+    if 'delete' in cmd:return json.dumps({'msg':'不能使用 delete 等危险命令'}, ensure_ascii=False)
+    try:
+        cmd_json = cmd + ' -o json'
+        logger.info(cmd_json)
+        data = r_shell(cmd_json)[1]
+        # logger.info(data)
+        if "doesn't" in data:return json.dumps({'msg':'命令错误为获取到数据'}, ensure_ascii=False)
+        return data
+    except:
+        logger.info(data)
+        return json.dumps({'msg':'未知错误'},ensure_ascii=False)
+    # return

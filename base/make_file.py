@@ -111,7 +111,7 @@ def MakeIgYaml(NAMESPACE="young-sit"):
     # 获取zebra-ui 下绑定的域名
     DOMAIN = zebra_ingress["spec"]["rules"][0]["host"]
     # ["spec"]["rules"][0]["host"]
-    # print('xxxxxxxxxxxxxxxx',DOMAIN)
+    # print('xxxxxxxxxxxxxxxx',DOMAnIN)
     SVC_IN_LIST = []
     for i in zebra_ingress["spec"]["rules"][0]["http"]["paths"]:
         SVC_IN_LIST.append(i["backend"]["service"]["name"])

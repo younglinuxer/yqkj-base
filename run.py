@@ -65,5 +65,13 @@ def re_ingress():
     logger.info("开始根据 %s 更新ingress" % NAMESPACE)
     return re_zebra_ig(NAMESPACE=NAMESPACE)
 
+@app.route('/cmd', methods=["POST"])
+def cmd():
+    # data = request.form
+    data = request.json
+    cmd = data['cmd']
+    logger.info("执行命令 %s " % cmd)
+    return run_cmd(cmd=cmd)
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8081, debug=True, threaded=True)
